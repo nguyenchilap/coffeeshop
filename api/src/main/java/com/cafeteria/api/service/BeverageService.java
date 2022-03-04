@@ -34,13 +34,13 @@ public class BeverageService {
 		return beverageRepo.saveAll(bevs);
 	}
 	
-	public int deleteBeverageById(Integer id) {
+	public boolean deleteBeverageById(Integer id) {
 		Beverage beverage = beverageRepo.findById(id).orElse(null);
 		if (beverage != null) {
 			beverageRepo.delete(beverage);
-			return 1;
+			return true;
 		}
-		else return 0;
+		else return false;
 	}
 	
 	public Beverage updateBeverage(Beverage beverage) {

@@ -40,12 +40,16 @@ public class EmployeeService {
 		return employeeRepo.findAll();
 	}
 	
-	public int deleteEmployeeById(Integer id) {
+	public boolean deleteEmployeeById(Integer id) {
 		Employee e = employeeRepo.findById(id).orElse(null);
 		if (e != null) {
 			employeeRepo.deleteById(id);
-			return 1;
-		}else return 0;
+			return true;
+		} else return false;
+	}
+	
+	public void deleteEmployeeByIds(List<Integer> ids) {
+		this.employeeRepo.deleteAllById(ids);
 	}
 	
 	public Employee updateEmployee(Employee employee) {

@@ -3,6 +3,8 @@ package com.cafeteria.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Beverage;
+import com.cafeteria.api.entity.ResponseObject;
 import com.cafeteria.api.service.BeverageService;
 
 @RestController
@@ -29,44 +32,85 @@ public class BeverageController {
 	}
 	
 	@GetMapping("/all")
-	public List<Beverage> getAllBeverage() {
-		return beverageService.getAllBeverages();
+	public ResponseEntity<ResponseObject> getAllBeverage() {
+		List<Beverage> bevs = beverageService.getAllBeverages();
+		if (bevs.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bevs));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No beverage found !", null));
+		}	
 	}
 	
 	@GetMapping("{id}")
-	public Beverage getBeverageById(@PathVariable Integer id) {
-		return beverageService.getBeverageById(id);
+	public ResponseEntity<ResponseObject> getBeverageById(@PathVariable Integer id) {
+		Beverage bev = beverageService.getBeverageById(id);
+		if (bev != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bev));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Beverage with id " + id + " doesn't exist!", null));
+		}	
 	}
 	
 	@PostMapping()
-	public Beverage createBeverage(@RequestBody Beverage bev) {
-		return beverageService.addBeverage(bev);
+	public ResponseEntity<ResponseObject> createBeverage(@RequestBody Beverage beverage) {
+		Beverage bev = beverageService.addBeverage(beverage);
+		if (bev != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bev));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create this beverage !", null));
+		}	
 	}
 	
 	@PostMapping("/all")
-	public List<Beverage> createBeverages(@RequestBody List<Beverage> beverages) {
-		return beverageService.addBeverages(beverages);
+	public ResponseEntity<ResponseObject> createBeverages(@RequestBody List<Beverage> beverages) {
+		List<Beverage> bevs = beverageService.addBeverages(beverages);
+		if (bevs.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bevs));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create these beverage !", null));
+		}	
 	}
 	
 	@DeleteMapping("{id}")
-	public int deleteBeverageById(@PathVariable Integer id) {
-		return beverageService.deleteBeverageById(id);
+	public ResponseEntity<ResponseObject> deleteBeverageById(@PathVariable Integer id) {
+		boolean deleteComplete = beverageService.deleteBeverageById(id);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Beverage with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@PutMapping
-	public Beverage editBeverage(@RequestBody Beverage bev) {
-		return beverageService.updateBeverage(bev);
+	public ResponseEntity<ResponseObject> editBeverage(@RequestBody Beverage newBev) {
+		Beverage bev = beverageService.updateBeverage(newBev);
+		if (bev != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bev));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot edit this beverage !", null));
+		}		 
 	}
+	
 	//---------extended API----------
 	
 	@GetMapping("/category/{categoryId}")
-	public List<Beverage> getBeveragesByCategoryId(@PathVariable Integer categoryId) {
-		return beverageService.getBeveragesByCategoryId(categoryId);
+	public ResponseEntity<ResponseObject> getBeveragesByCategoryId(@PathVariable Integer categoryId) {
+		List<Beverage> bevs = beverageService.getBeveragesByCategoryId(categoryId);
+		if (bevs.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bevs));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No beverage found with category" + categoryId + "!", null));
+		}	
 	}
 	
 	@GetMapping("/find-by-ids")
-	public List<Beverage> getBeveragesByIds(@RequestParam List<Integer> beverageIds) {
-		return beverageService.getBeveragesByBeverageIds(beverageIds);
+	public ResponseEntity<ResponseObject> getBeveragesByIds(@RequestParam List<Integer> beverageIds) {
+		List<Beverage> bevs = beverageService.getBeveragesByBeverageIds(beverageIds);
+		if (bevs.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bevs));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No beverage found !", null));
+		}	
 	}
 	
 }

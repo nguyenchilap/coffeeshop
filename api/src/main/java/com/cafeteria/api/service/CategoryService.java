@@ -46,15 +46,15 @@ public class CategoryService {
 		return categoryRepo.save(category);
 	}
 	
-	public int deleteCategoryById(Integer id) {
+	public boolean deleteCategoryById(Integer id) {
 		Category cat = categoryRepo.findById(id).orElse(null);
 		if (cat != null) {
 			cat.getBeverageList().forEach(bev -> {
 				beverageService.deleteBeverageById(bev.getBeverageId());
 			});
 			categoryRepo.deleteById(id);
-			return 1;
-		}else return 0;
+			return true;
+		} else return false;
 	}
 	
 	public Category updateCategory(Category cat) {

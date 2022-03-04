@@ -3,6 +3,8 @@ package com.cafeteria.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Employee;
+import com.cafeteria.api.entity.ResponseObject;
 import com.cafeteria.api.service.EmployeeService;
 
 
@@ -32,38 +35,79 @@ public class EmployeeController {
 	
 	//----basic api-----
 	@PostMapping
-	public Employee addEmployee(@RequestBody Employee employee) {
-		return employeeService.createEmployee(employee);
+	public ResponseEntity<ResponseObject> addEmployee(@RequestBody Employee employee) {
+		Employee checkExistingLoginName = employeeService.getEmployeeByLoginName(employee.getEmployeeLoginName());
+		if (checkExistingLoginName != null) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("failed", "Login name existed !", null));
+		} else {
+			Employee empl = employeeService.createEmployee(employee);
+			if (empl != null) {
+				return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empl));
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create employee !", null));
+			}
+		}
 	}
 	
 	@GetMapping("/all")
-	public List<Employee> getAllEmployees(){
-		return employeeService.getAllEmployee();
+	public ResponseEntity<ResponseObject> getAllEmployees(){
+		List<Employee> empls = employeeService.getAllEmployee();
+		if (empls.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empls));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No employee found !", null));
+		}
 	}
 	
 	@GetMapping("{id}")
-	public Employee getEmployeeById(@PathVariable("id") Integer id) {
-		return employeeService.getEmployeeById(id);
+	public ResponseEntity<ResponseObject> getEmployeeById(@PathVariable Integer id) {
+		Employee empl = employeeService.getEmployeeById(id);
+		if (empl != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empl));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Employee with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@DeleteMapping("{id}")
-	public int deleteEmployeeById(@PathVariable("id") Integer id) {
-		return employeeService.deleteEmployeeById(id);
+	public ResponseEntity<ResponseObject> deleteEmployeeById(@PathVariable Integer id) {
+		boolean deleteComplete = employeeService.deleteEmployeeById(id);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Employee with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@PutMapping
-	public Employee editEmployee(@RequestBody Employee employee) {
-		return employeeService.updateEmployee(employee);
+	public ResponseEntity<ResponseObject> editEmployee(@RequestBody Employee employee) {
+		Employee empl = employeeService.updateEmployee(employee);
+		if (empl != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empl));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot edit employee !", null));
+		}
 	}
 	
 	//-----extended api------
+	
 	@GetMapping
-	public Employee getEmployeeByLoginName(@RequestBody Employee employee) {
-		return employeeService.getEmployeeByLoginName(employee.getEmployeeLoginName());
+	public ResponseEntity<ResponseObject> getEmployeeByLoginName(@RequestBody Employee employee) {
+		Employee empl = employeeService.getEmployeeByLoginName(employee.getEmployeeLoginName());
+		if (empl != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empl));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Employee with login name " + employee.getEmployeeLoginName() + " doesn't exist!", null));
+		}
 	}
 	
 	@GetMapping("/store/{storeId}")
-	public List<Employee> getEmployeeByLoginName(@PathVariable("storeId") Integer storeId) {
-		return employeeService.getEmployeesByStoreId(storeId);
+	public ResponseEntity<ResponseObject> getEmployeesByStoreId(@PathVariable Integer storeId) {
+		List<Employee> empls = employeeService.getEmployeesByStoreId(storeId);
+		if (empls.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empls));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No employee found !", null));
+		}
 	}
 }

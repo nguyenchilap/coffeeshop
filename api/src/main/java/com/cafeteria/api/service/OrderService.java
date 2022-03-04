@@ -42,15 +42,21 @@ public class OrderService {
 		return this.orderBeverageService.createMultiOrderBeverage(orderBeverages);
 	}
 	
-	public int deleteOneOrder(Integer orderId) {
-		this.orderBeverageService.deleteOrderBeveragesByOrderId(orderId);
-		this.orderRepo.deleteById(orderId);
-		return 1;
+	public boolean deleteOneOrder(Integer orderId) {
+		Order order = orderRepo.findById(orderId).orElse(null);
+		if (order != null) {
+			this.orderBeverageService.deleteOrderBeveragesByOrderId(orderId);
+			this.orderRepo.deleteById(orderId);
+			return true;
+		} else return false;
 	}
 	
-	public int deleteMultiOrder(List<Integer> orderIds) {
-		this.orderBeverageService.deleteOrderBeveragesByOrderIds(orderIds);
-		this.orderRepo.deleteAllById(orderIds);
-		return 1;
+	public boolean deleteMultiOrder(List<Integer> orderIds) {
+		List<Order> orders = orderRepo.findAllById(orderIds);
+		if (orders.size() == orderIds.size()) {
+			this.orderBeverageService.deleteOrderBeveragesByOrderIds(orderIds);
+			this.orderRepo.deleteAllById(orderIds);
+			return true;
+		} return false;
 	}
 }

@@ -1,9 +1,10 @@
 package com.cafeteria.api.controller;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cafeteria.api.entity.Category;
+import com.cafeteria.api.entity.ResponseObject;
 import com.cafeteria.api.entity.Store;
 import com.cafeteria.api.service.StoreService;
 
@@ -26,39 +27,58 @@ public class StoreController {
 	
 	@Autowired
 	public StoreController(StoreService storeService) {
-		super();
 		this.storeService = storeService;
 	}
 	
+	//----basic api-----
 	@PostMapping
-	public Store addStore(@RequestBody Store store) {
-		return storeService.createStore(store);
+	public ResponseEntity<ResponseObject> addStore(@RequestBody Store store) {
+		Store s = storeService.createStore(store);
+		if (s != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", s));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create store !", null));
+		}
 	}
 
 	@GetMapping("/all")
-	public List<Store> getAllStores() {
-		return storeService.getAllStore();
+	public ResponseEntity<ResponseObject> getAllStores() {
+		List<Store> s = storeService.getAllStore();
+		if (s.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", s));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No store found !", null));
+		}
 	}
 	
 	@GetMapping("{id}")
-	public Store getStoreById(@PathVariable("id") Integer id) {
-		return storeService.getStoreById(id);
+	public ResponseEntity<ResponseObject> getStoreById(@PathVariable Integer id) {
+		Store s = storeService.getStoreById(id);
+		if (s != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", s));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Store with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@DeleteMapping("{id}")
-	public int deleteStoreById(@PathVariable("id") Integer id) {
-		return storeService.deleteById(id);
+	public ResponseEntity<ResponseObject> deleteStoreById(@PathVariable Integer id) {
+		boolean deleteComplete = storeService.deleteById(id);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Store with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@PutMapping()
-	public Store editStore(@RequestBody Store store) {
-		return storeService.updateStore(store);
-	}
-	
-	//----- extended api -----
-	@GetMapping("{id}/categories")
-	public Set<Category> getAllCategory(@PathVariable("id") Integer id){
-		return storeService.getAllCategoriesOfStore(id);
+	public ResponseEntity<ResponseObject> editStore(@RequestBody Store store) {
+		Store s = storeService.updateStore(store);
+		if (s != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", s));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot edit this store !", null));
+		}
 	}
 	
 }

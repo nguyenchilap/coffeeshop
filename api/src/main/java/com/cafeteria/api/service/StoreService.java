@@ -33,12 +33,12 @@ public class StoreService {
 		return storeRepo.findAll();
 	}
 	
-	public int deleteById(Integer id) {
+	public boolean deleteById(Integer id) {
 		Store store = storeRepo.findById(id).orElse(null);
-		if (store == null) return 0;
+		if (store == null) return false;
 		else {
 			storeRepo.delete(store);
-			return 1;
+			return true;
 		}		
 	}
 

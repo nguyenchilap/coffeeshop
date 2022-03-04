@@ -19,7 +19,7 @@ public class VoucherService {
 		this.voucherRepo = voucherRepo;
 	}
 	
-	//----basic api-----
+	//----basic service-----
 	public List<Voucher> getAllVouchers(){
 		return voucherRepo.findAll();
 	}
@@ -32,13 +32,13 @@ public class VoucherService {
 		return voucherRepo.save(voucher);
 	}
 	
-	public int deleteVoucherById(Integer id) {
+	public boolean deleteVoucherById(Integer id) {
 		Voucher voucher = voucherRepo.findById(id).orElse(null);
 		if (voucher != null) {
 			voucherRepo.deleteById(id);
-			return 1;
+			return true;
 		}
-		else return 0;
+		else return false;
 	}
 	
 	public Voucher updateVoucher(Voucher voucher) {
@@ -53,7 +53,7 @@ public class VoucherService {
 		return voucherRepo.save(existingVoucher);
 	}
 	
-	//----extended api-----
+	//----extended service-----
 	
 	public Voucher decreaseVoucherLimit(Voucher voucher) {
 		if (voucher.getVoucherLimit() > 0)

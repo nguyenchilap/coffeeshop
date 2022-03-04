@@ -3,6 +3,8 @@ package com.cafeteria.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Order;
 import com.cafeteria.api.entity.OrderBeverage;
+import com.cafeteria.api.entity.ResponseObject;
 import com.cafeteria.api.service.OrderService;
 
 @RestController
@@ -31,35 +34,65 @@ public class OrderController {
 	//-----basic api------
 	
 	@GetMapping("/all")
-	public List<Order> getAllOrders(){
-		return orderService.getAllOrders();
+	public ResponseEntity<ResponseObject> getAllOrders(){
+		List<Order> orders = orderService.getAllOrders();
+		if (orders.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", orders));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No order found !", null));
+		}
 	}
 	
 	@GetMapping("{id}")
-	public Order getOrderById(@PathVariable("id") Integer id) {
-		return orderService.getOrderById(id);
+	public ResponseEntity<ResponseObject> getOrderById(@PathVariable Integer id) {
+		Order order = orderService.getOrderById(id);
+		if (order != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", order));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Order with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@PostMapping
-	public Order createOrderEmpty (@RequestBody Order order) {
-		return this.orderService.addOrder(order);
+	public ResponseEntity<ResponseObject> createOrderEmpty (@RequestBody Order od) {
+		Order order = orderService.addOrder(od);
+		if (order != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", order));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create this order", null));
+		}
 	}
 	
-	@DeleteMapping
-	public int deleteOneOrder (@PathVariable("id") Integer orderId) {
-		return this.orderService.deleteOneOrder(orderId);
-	}
-	
-	@DeleteMapping("/all")
-	public int deleteOneOrder (@RequestParam("ids") List<Integer> orderIds) {
-		return this.orderService.deleteMultiOrder(orderIds);
+	@DeleteMapping("{orderId}")
+	public ResponseEntity<ResponseObject> deleteOneOrder (@PathVariable Integer orderId) {
+		boolean deleteComplete = this.orderService.deleteOneOrder(orderId);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Order with id " + orderId + " doesn't exist!", null));
+		}
 	}
 	
 	//------ extended api -------
 	
 	@PostMapping("/add-beverage-to-order")
-	public List<OrderBeverage> addBeverageToOrder (@RequestBody List<OrderBeverage> orderBeverages) {
-		return this.orderService.addBeverageToOrder(orderBeverages);
+	public ResponseEntity<ResponseObject> addBeverageToOrder (@RequestBody List<OrderBeverage> orderBeverages) {
+		List<OrderBeverage> ob = this.orderService.addBeverageToOrder(orderBeverages);
+		if (ob.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", ob));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot import these beverage", null));
+		}
+	}
+	
+	@DeleteMapping("/all")
+	public ResponseEntity<ResponseObject> deleteMultiOrder (@RequestParam List<Integer> ids) {
+		boolean deleteComplete = this.orderService.deleteMultiOrder(ids);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Some stores don't exist", null));
+		}
 	}
 	
 }

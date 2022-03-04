@@ -2,6 +2,8 @@ package com.cafeteria.api.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Category;
+import com.cafeteria.api.entity.ResponseObject;
 import com.cafeteria.api.service.CategoryService;
 
 @RestController
@@ -27,39 +30,75 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/all")
-	public List<Category> getAllCategories(){
-		return categoryService.getAllCategories();
-	}
-	
-	@GetMapping("/all-by-id")
-	public List<Category> getAllCategoriesByIds(@RequestParam("ids") List<Integer> ids){
-		return categoryService.getAllCategoriesByIds(ids);
+	public ResponseEntity<ResponseObject> getAllCategories(){
+		List<Category> cats = categoryService.getAllCategories();
+		if (cats.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cats));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No category found !", null));
+		}
 	}
 	
 	@GetMapping("{id}")
-	public Category getCategoryById(@PathVariable("id") Integer id) {
-		return categoryService.getCategoryById(id);
+	public ResponseEntity<ResponseObject> getCategoryById(@PathVariable Integer id) {
+		Category cat = categoryService.getCategoryById(id);
+		if (cat != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cat));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Category with id " + id + " doesn't exist!", null));
+		}
 	}
 	
 	@PostMapping
-	public Category createCategory(@RequestBody Category category) {
-		return categoryService.addCategory(category);
+	public ResponseEntity<ResponseObject> createCategory(@RequestBody Category category) {
+		Category cat = categoryService.addCategory(category);
+		if (cat != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cat));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create category", null));
+		}
 	}
 	
 	@DeleteMapping("{id}")
-	public int deleteCategoryById(@PathVariable("id") Integer id) {
-		return categoryService.deleteCategoryById(id);
+	public ResponseEntity<ResponseObject> deleteCategoryById(@PathVariable Integer id) {
+		boolean deleteComplete = categoryService.deleteCategoryById(id);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Category with id " + id + " doesn't exist!", deleteComplete));
+		}
 	}
 	
 	@PutMapping()
-	public Category editCategory(@RequestBody Category cat) {
-		return categoryService.updateCategory(cat);
+	public ResponseEntity<ResponseObject> editCategory(@RequestBody Category newCat) {
+		Category cat = categoryService.updateCategory(newCat);
+		if (cat != null) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cat));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(new ResponseObject("failed", "Cannot create category", null));
+		}
 	}
 	
 	//--------extended API-------
+	
+	@GetMapping("/all-by-id")
+	public ResponseEntity<ResponseObject> getAllCategoriesByIds(@RequestParam List<Integer> ids){
+		List<Category> cats = categoryService.getAllCategoriesByIds(ids);
+		if (cats.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cats));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No category found !", null));
+		}
+	}
+	
 	@GetMapping("/store/{storeId}")
-	public List<Category> getCategoriesByStoreId(@PathVariable("storeId") Integer storeId){
-		return categoryService.getCategoriesByStoreId(storeId);
+	public ResponseEntity<ResponseObject> getCategoriesByStoreId(@PathVariable("storeId") Integer storeId){
+		List<Category> cats =  categoryService.getCategoriesByStoreId(storeId);
+		if (cats.size() > 0) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cats));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No category found !", null));
+		}
 	}
 	
 	
