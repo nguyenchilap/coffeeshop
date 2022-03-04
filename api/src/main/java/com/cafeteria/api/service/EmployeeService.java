@@ -54,6 +54,7 @@ public class EmployeeService {
 		e.setEmployeeGender(employee.getEmployeeGender());
 		e.setEmployeeName(employee.getEmployeeName());
 		e.setEmployeePhone(employee.getEmployeePhone());
+		e.setEmployeeImage(employee.getEmployeeImage());
 		return employeeRepo.save(e);
 	}
 	

@@ -50,6 +50,7 @@ public class Beverage {
 	private Category category;
 
 	//------getter setter------
+	
 	public void setOrderBeverages(Set<OrderBeverage> orderBeverages) {
 		this.orderBeverages = orderBeverages;
 	}

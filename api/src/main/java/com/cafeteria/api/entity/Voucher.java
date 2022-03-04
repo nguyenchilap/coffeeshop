@@ -12,8 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.Transient;
 
 @Entity(name="voucher")
 @Table(name="voucher")
@@ -45,7 +44,7 @@ public class Voucher {
 	@Column(name="VoucherLimit", nullable = false)
 	private Integer voucherLimit;
 	
-	@JsonManagedReference
+	@Transient
 	@OneToMany(targetEntity=Order.class, mappedBy="voucher", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	Set<Order> orderList;
 	

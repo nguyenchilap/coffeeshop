@@ -16,8 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity(name="orders")
 @Table(name="orders")
 public class Order {
@@ -46,7 +44,6 @@ public class Order {
 	@Column(name="VoucherId")
 	private Integer voucherId;
 
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="VoucherId", insertable= false, updatable= false)
 	private Voucher voucher;

@@ -18,8 +18,10 @@ public class JwtResponse {
 
 	private String employeeImage;
 	
+	private Integer employeeGender;
+	
 	public JwtResponse(String tokenId, Integer employeeId, String employeeLoginName, String employeeName,
-			String employeeEmail, String employeePhone, Integer employeeRole, String employeeImage) {
+			String employeeEmail, String employeePhone, Integer employeeRole, String employeeImage, Integer employeeGender) {
 		this.tokenId = tokenId;
 		this.employeeId = employeeId;
 		this.employeeLoginName = employeeLoginName;
@@ -28,6 +30,20 @@ public class JwtResponse {
 		this.employeePhone = employeePhone;
 		this.employeeRole = employeeRole;
 		this.employeeImage = employeeImage;
+		this.employeeGender = employeeGender;
+	}
+	
+	
+	public String getTokenId() {
+		return tokenId;
+	}
+
+	public Integer getEmployeeGender() {
+		return employeeGender;
+	}
+
+	public void setEmployeeGender(Integer employeeGender) {
+		this.employeeGender = employeeGender;
 	}
 
 	public Integer getEmployeeId() {

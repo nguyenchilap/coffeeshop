@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Category;
@@ -28,6 +29,11 @@ public class CategoryController {
 	@GetMapping("/all")
 	public List<Category> getAllCategories(){
 		return categoryService.getAllCategories();
+	}
+	
+	@GetMapping("/all-by-id")
+	public List<Category> getAllCategoriesByIds(@RequestParam("ids") List<Integer> ids){
+		return categoryService.getAllCategoriesByIds(ids);
 	}
 	
 	@GetMapping("{id}")

@@ -53,7 +53,6 @@ public class JwtAuthenticationController {
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		
 		return ResponseEntity.ok(new JwtResponse(token, employee.getEmployeeId(), employee.getEmployeeLoginName(), employee.getEmployeeName(),
-				employee.getEmployeeEmail(), employee.getEmployeePhone(), employee.getEmployeeRole(), employee.getEmployeeImage()));
+				employee.getEmployeeEmail(), employee.getEmployeePhone(), employee.getEmployeeRole(), employee.getEmployeeImage(), employee.getEmployeeGender()));
 	}
-	
 }

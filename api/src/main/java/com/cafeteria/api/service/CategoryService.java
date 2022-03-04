@@ -1,5 +1,6 @@
 package com.cafeteria.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,16 @@ public class CategoryService {
 	
 	public List<Category> getAllCategories(){
 		return categoryRepo.findAll();
+	}
+	
+	public List<Category> getAllCategoriesByIds(List<Integer> ids) {
+		List<Category> categories = new ArrayList<Category>();
+		
+		ids.forEach(id -> {
+			categories.add(this.categoryRepo.findById(id).orElse(null));
+		});
+		
+		return categories;
 	}
 	
 	public Category getCategoryById(Integer id) {
