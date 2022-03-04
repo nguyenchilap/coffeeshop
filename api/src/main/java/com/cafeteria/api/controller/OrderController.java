@@ -3,11 +3,13 @@ package com.cafeteria.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.Order;
@@ -41,6 +43,16 @@ public class OrderController {
 	@PostMapping
 	public Order createOrderEmpty (@RequestBody Order order) {
 		return this.orderService.addOrder(order);
+	}
+	
+	@DeleteMapping
+	public int deleteOneOrder (@PathVariable("id") Integer orderId) {
+		return this.orderService.deleteOneOrder(orderId);
+	}
+	
+	@DeleteMapping("/all")
+	public int deleteOneOrder (@RequestParam("ids") List<Integer> orderIds) {
+		return this.orderService.deleteMultiOrder(orderIds);
 	}
 	
 	//------ extended api -------

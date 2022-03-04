@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 
 import com.cafeteria.api.entity.EmbeddedKey.OrderKey;
 
-@Entity
+@Entity(name="order_beverage")
 @Table(name="order_beverage")
 @AssociationOverrides({
     @AssociationOverride(name = "primaryKey.order",

@@ -29,4 +29,12 @@ public class OrderBeverageService {
 		return 1;
 	}
 	
+	public void deleteOrderBeveragesByOrderId (Integer orderId) {
+		this.orderBeverageRepo.deleteAll(this.orderBeverageRepo.getOrderBeveragesByOrderId(orderId));
+	}
+	
+	public void deleteOrderBeveragesByOrderIds (List<Integer> orderIds) {
+		this.orderBeverageRepo.deleteAll(this.orderBeverageRepo.getOrderBeveragesByOrderIds(orderIds));
+	}
+	
 }

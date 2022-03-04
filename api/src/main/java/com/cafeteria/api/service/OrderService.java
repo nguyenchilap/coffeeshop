@@ -41,4 +41,16 @@ public class OrderService {
 	public List<OrderBeverage> addBeverageToOrder(List<OrderBeverage> orderBeverages) {
 		return this.orderBeverageService.createMultiOrderBeverage(orderBeverages);
 	}
+	
+	public int deleteOneOrder(Integer orderId) {
+		this.orderBeverageService.deleteOrderBeveragesByOrderId(orderId);
+		this.orderRepo.deleteById(orderId);
+		return 1;
+	}
+	
+	public int deleteMultiOrder(List<Integer> orderIds) {
+		this.orderBeverageService.deleteOrderBeveragesByOrderIds(orderIds);
+		this.orderRepo.deleteAllById(orderIds);
+		return 1;
+	}
 }
