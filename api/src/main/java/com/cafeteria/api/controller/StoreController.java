@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cafeteria.api.entity.ResponseObject;
@@ -68,6 +69,16 @@ public class StoreController {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Store with id " + id + " doesn't exist!", null));
+		}
+	}
+	
+	@DeleteMapping("/all")
+	public ResponseEntity<ResponseObject> deleteStoreByIds(@RequestParam List<Integer> ids) {
+		boolean deleteComplete = storeService.deleteByIds(ids);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Some stores don't exist!", null));
 		}
 	}
 	

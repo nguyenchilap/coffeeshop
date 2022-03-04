@@ -44,7 +44,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject> getOrderById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> getOrderById(@PathVariable("id") Integer id) {
 		Order order = orderService.getOrderById(id);
 		if (order != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", order));
@@ -64,7 +64,7 @@ public class OrderController {
 	}
 	
 	@DeleteMapping("{orderId}")
-	public ResponseEntity<ResponseObject> deleteOneOrder (@PathVariable Integer orderId) {
+	public ResponseEntity<ResponseObject> deleteOneOrder (@PathVariable("orderId") Integer orderId) {
 		boolean deleteComplete = this.orderService.deleteOneOrder(orderId);
 		if (deleteComplete) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));

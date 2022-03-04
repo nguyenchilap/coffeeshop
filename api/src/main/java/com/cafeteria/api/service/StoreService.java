@@ -20,7 +20,7 @@ public class StoreService {
 		this.storeRepo = storeRepo;
 	}
 	
-	//----- basic restful -----
+	//----- basic service -----
 	public Store createStore(Store store) {
 		return storeRepo.save(store);
 	}
@@ -50,9 +50,18 @@ public class StoreService {
 		return storeRepo.save(existingStore);
 	}
 	
-	//----- extended API ------
+	//----- extended service ------
 	
 	public Set<Category> getAllCategoriesOfStore(Integer id){
 		return storeRepo.findById(id).orElse(null).getCategoryList();
+	}
+	
+	public boolean deleteByIds(List<Integer> ids) {
+		List<Store> stores = storeRepo.findAllById(ids);
+		if (stores.size() < ids.size()) return false;
+		else {
+			storeRepo.deleteAll(stores);
+			return true;
+		}
 	}
 }

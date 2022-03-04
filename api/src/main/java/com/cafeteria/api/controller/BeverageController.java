@@ -42,7 +42,7 @@ public class BeverageController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject> getBeverageById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> getBeverageById(@PathVariable("id") Integer id) {
 		Beverage bev = beverageService.getBeverageById(id);
 		if (bev != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bev));
@@ -72,7 +72,7 @@ public class BeverageController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<ResponseObject> deleteBeverageById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> deleteBeverageById(@PathVariable("id") Integer id) {
 		boolean deleteComplete = beverageService.deleteBeverageById(id);
 		if (deleteComplete) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
@@ -94,7 +94,7 @@ public class BeverageController {
 	//---------extended API----------
 	
 	@GetMapping("/category/{categoryId}")
-	public ResponseEntity<ResponseObject> getBeveragesByCategoryId(@PathVariable Integer categoryId) {
+	public ResponseEntity<ResponseObject> getBeveragesByCategoryId(@PathVariable("categoryId") Integer categoryId) {
 		List<Beverage> bevs = beverageService.getBeveragesByCategoryId(categoryId);
 		if (bevs.size() > 0) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", bevs));

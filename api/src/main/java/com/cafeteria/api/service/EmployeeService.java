@@ -48,8 +48,12 @@ public class EmployeeService {
 		} else return false;
 	}
 	
-	public void deleteEmployeeByIds(List<Integer> ids) {
-		this.employeeRepo.deleteAllById(ids);
+	public boolean deleteEmployeeByIds(List<Integer> ids) {
+		List<Employee> es = employeeRepo.findAllById(ids);
+		if (es.size() == ids.size()) {
+			employeeRepo.deleteAllById(ids);
+			return true;
+		} else return false;
 	}
 	
 	public Employee updateEmployee(Employee employee) {

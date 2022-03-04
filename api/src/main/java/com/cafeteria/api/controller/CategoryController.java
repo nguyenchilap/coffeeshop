@@ -40,7 +40,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject> getCategoryById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> getCategoryById(@PathVariable("id") Integer id) {
 		Category cat = categoryService.getCategoryById(id);
 		if (cat != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cat));
@@ -60,7 +60,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<ResponseObject> deleteCategoryById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> deleteCategoryById(@PathVariable("id") Integer id) {
 		boolean deleteComplete = categoryService.deleteCategoryById(id);
 		if (deleteComplete) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));

@@ -60,7 +60,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject> getEmployeeById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> getEmployeeById(@PathVariable("id") Integer id) {
 		Employee empl = employeeService.getEmployeeById(id);
 		if (empl != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empl));
@@ -70,7 +70,7 @@ public class EmployeeController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<ResponseObject> deleteEmployeeById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> deleteEmployeeById(@PathVariable("id") Integer id) {
 		boolean deleteComplete = employeeService.deleteEmployeeById(id);
 		if (deleteComplete) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
@@ -102,12 +102,22 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/store/{storeId}")
-	public ResponseEntity<ResponseObject> getEmployeesByStoreId(@PathVariable Integer storeId) {
+	public ResponseEntity<ResponseObject> getEmployeesByStoreId(@PathVariable("storeId") Integer storeId) {
 		List<Employee> empls = employeeService.getEmployeesByStoreId(storeId);
 		if (empls.size() > 0) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", empls));
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "No employee found !", null));
+		}
+	}
+	
+	@DeleteMapping("/all")
+	public ResponseEntity<ResponseObject> deleteEmployeeById(@PathVariable("ids") List<Integer> ids) {
+		boolean deleteComplete = employeeService.deleteEmployeeByIds(ids);
+		if (deleteComplete) {
+			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Some employee don't exist", null));
 		}
 	}
 }
