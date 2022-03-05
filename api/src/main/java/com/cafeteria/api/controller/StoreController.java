@@ -53,7 +53,7 @@ public class StoreController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject> getStoreById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> getStoreById(@PathVariable("id") Integer id) {
 		Store s = storeService.getStoreById(id);
 		if (s != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", s));
@@ -63,7 +63,7 @@ public class StoreController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<ResponseObject> deleteStoreById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject> deleteStoreById(@PathVariable("id") Integer id) {
 		boolean deleteComplete = storeService.deleteById(id);
 		if (deleteComplete) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", deleteComplete));

@@ -62,7 +62,10 @@ public class CategoryService {
 		existingCat.setCategoryName(cat.getCategoryName());
 		existingCat.setStoreId(cat.getStoreId());
 		existingCat.setStore(cat.getStore());
-		existingCat.setBeverageList(cat.getBeverageList());
+		cat.getBeverageList().forEach(beverage -> {
+			beverageService.updateBeverage(beverage);
+			System.out.println(beverage.getBeveragePrice());
+		});
 		return categoryRepo.save(existingCat);
 	}
 	

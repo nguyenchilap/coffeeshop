@@ -42,7 +42,7 @@ public class VoucherController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<ResponseObject>  getVoucherById(@PathVariable Integer id) {
+	public ResponseEntity<ResponseObject>  getVoucherById(@PathVariable("id") Integer id) {
 		Voucher voucher = voucherService.getVoucherById(id);
 		if (voucher != null) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", voucher));
