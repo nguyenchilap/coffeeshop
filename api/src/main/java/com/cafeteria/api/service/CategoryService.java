@@ -62,6 +62,7 @@ public class CategoryService {
 		existingCat.setCategoryName(cat.getCategoryName());
 		existingCat.setStoreId(cat.getStoreId());
 		existingCat.setStore(cat.getStore());
+		existingCat.setCategoryImage(cat.getCategoryImage());
 		cat.getBeverageList().forEach(beverage -> {
 			beverageService.updateBeverage(beverage);
 			System.out.println(beverage.getBeveragePrice());

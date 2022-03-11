@@ -82,7 +82,7 @@ public class CategoryController {
 	//--------extended API-------
 	
 	@GetMapping("/all-by-id")
-	public ResponseEntity<ResponseObject> getAllCategoriesByIds(@RequestParam List<Integer> ids){
+	public ResponseEntity<ResponseObject> getAllCategoriesByIds(@RequestParam("ids") List<Integer> ids){
 		List<Category> cats = categoryService.getAllCategoriesByIds(ids);
 		if (cats.size() > 0) {
 			return ResponseEntity.ok(new ResponseObject("complete", "Successfully !", cats));
