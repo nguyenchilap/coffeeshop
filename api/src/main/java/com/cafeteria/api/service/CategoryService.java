@@ -43,7 +43,11 @@ public class CategoryService {
 	}
 	
 	public Category addCategory(Category category) {
-		return categoryRepo.save(category);
+		Category cat = categoryRepo.save(category);
+		if (cat.getBeverageList().size() > 0) {
+			cat.setBeverageList(beverageService.addBeveragesToCategory(cat.getBeverageList(), cat.getCategoryId())); 
+		}
+		return categoryRepo.save(cat);
 	}
 	
 	public boolean deleteCategoryById(Integer id) {
@@ -60,13 +64,8 @@ public class CategoryService {
 	public Category updateCategory(Category cat) {
 		Category existingCat = categoryRepo.findById(cat.getCategoryId()).orElse(null);
 		existingCat.setCategoryName(cat.getCategoryName());
-		existingCat.setStoreId(cat.getStoreId());
-		existingCat.setStore(cat.getStore());
 		existingCat.setCategoryImage(cat.getCategoryImage());
-		cat.getBeverageList().forEach(beverage -> {
-			beverageService.updateBeverage(beverage);
-			System.out.println(beverage.getBeveragePrice());
-		});
+		beverageService.updateBeverageByCategory(cat.getBeverageList(), cat.getCategoryId());
 		return categoryRepo.save(existingCat);
 	}
 	

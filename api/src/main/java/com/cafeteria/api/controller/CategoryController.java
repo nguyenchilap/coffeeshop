@@ -21,7 +21,7 @@ import com.cafeteria.api.service.CategoryService;
 
 @RestController
 @RequestMapping("api/v1/category")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:5000"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8000"})
 public class CategoryController {
 	
 	private CategoryService categoryService;

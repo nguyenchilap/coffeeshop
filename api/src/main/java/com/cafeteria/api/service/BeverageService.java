@@ -34,6 +34,13 @@ public class BeverageService {
 		return beverageRepo.saveAll(bevs);
 	}
 	
+	public List<Beverage> addBeveragesToCategory(List<Beverage> bevs, Integer categoryId) {
+		bevs.forEach(bev -> {
+			bev.setCategoryId(categoryId);
+		});
+		return beverageRepo.saveAll(bevs);
+	}
+	
 	public boolean deleteBeverageById(Integer id) {
 		Beverage beverage = beverageRepo.findById(id).orElse(null);
 		if (beverage != null) {
@@ -57,5 +64,13 @@ public class BeverageService {
 	
 	public List<Beverage> getBeveragesByBeverageIds (List<Integer> ids){
 		return beverageRepo.findBeveragesByIds(ids);
+	}
+	
+	public List<Beverage> updateBeverageByCategory(List<Beverage> beverages, Integer categoryId) {
+		List<Beverage> existingBevs = beverageRepo.findBeveragesByCategoryId(categoryId);
+		for (int i = 0; i < existingBevs.size(); i++) {
+			existingBevs.get(i).setBeveragePrice(beverages.get(i).getBeveragePrice());
+		}
+		return beverageRepo.saveAll(existingBevs);
 	}
 }

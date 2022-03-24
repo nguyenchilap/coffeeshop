@@ -63,7 +63,10 @@ public class VoucherService {
 	
 	public Voucher getBestVoucher(Order order) {
 		List<Voucher> vouchers = voucherRepo.getVouchersByDate(order.getOrderDate());
-		Integer resultIndex = 0;
+		
+		if (vouchers.size() <= 0) return null;
+		
+		Integer resultIndex = -1;
 		Float maxPercentage = 0F;
 		
 		//find best voucher

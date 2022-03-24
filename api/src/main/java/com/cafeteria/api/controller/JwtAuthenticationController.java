@@ -20,7 +20,7 @@ import com.cafeteria.api.service.MyUserDetailsService;
 
 @RestController
 @RequestMapping("api/v1")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:5000"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8000"})
 public class JwtAuthenticationController {
 	
 	@Autowired

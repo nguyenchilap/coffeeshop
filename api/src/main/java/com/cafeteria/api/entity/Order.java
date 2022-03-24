@@ -28,7 +28,7 @@ public class Order {
 	@Column(name="OrderDate", nullable = false)
 	private Date orderDate;
 	
-	@Column(name="OrderNote", nullable = false, length=1000)
+	@Column(name="OrderNote", length=1000)
 	private String orderNote;
 	
 	@Column(name="OrderAddress", nullable = false, length=100)

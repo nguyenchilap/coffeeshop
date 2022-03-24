@@ -33,8 +33,11 @@ public class OrderService {
 	}
 	
 	public Order addOrder(Order order) {
-		Voucher voucher = voucherService.getVoucherById(order.getVoucherId());
-		if (voucher != null) voucherService.decreaseVoucherLimit(voucher);
+		if (order.getVoucherId() != null) {
+			Voucher voucher = voucherService.getVoucherById(order.getVoucherId());
+			if (voucher != null)
+				voucherService.decreaseVoucherLimit(voucher);
+		}
 		return orderRepo.save(order);
 	}
 	

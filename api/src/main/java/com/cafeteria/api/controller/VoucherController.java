@@ -22,7 +22,7 @@ import com.cafeteria.api.service.VoucherService;
 
 @RestController
 @RequestMapping("/api/v1/voucher")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:5000"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8000"})
 public class VoucherController {
 	
 	private VoucherService voucherService;

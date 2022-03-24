@@ -22,7 +22,7 @@ import com.cafeteria.api.service.StoreService;
 
 @RestController
 @RequestMapping("api/v1/store")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:5000"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8000"})
 public class StoreController {
 	
 	private StoreService storeService;
