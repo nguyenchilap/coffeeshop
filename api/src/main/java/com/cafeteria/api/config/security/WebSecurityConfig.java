@@ -59,11 +59,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/api/v1/store/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.DELETE, "/api/v1/store/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.PUT, "/api/v1/store/**").hasAnyAuthority("Admin")
+			
+			.antMatchers(HttpMethod.POST, "/api/v1/employee/**").hasAnyAuthority("Admin")
+			.antMatchers(HttpMethod.DELETE, "/api/v1/employee/**").hasAnyAuthority("Admin")
+			
 			.antMatchers(HttpMethod.POST, "/api/v1/voucher/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.DELETE, "/api/v1/voucher/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.PUT, "/api/v1/voucher/**").hasAnyAuthority("Admin")
+			
 			.antMatchers(HttpMethod.POST, "/api/v1/category/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.DELETE, "/api/v1/category/**").hasAnyAuthority("Admin")
+			
 			.antMatchers(HttpMethod.POST, "/api/v1/beverage/**").hasAnyAuthority("Admin")
 			.antMatchers(HttpMethod.DELETE, "/api/v1/beverage/**").hasAnyAuthority("Admin")
 			.anyRequest().fullyAuthenticated();

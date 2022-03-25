@@ -1,8 +1,10 @@
 package com.cafeteria.api.config.security;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -19,6 +21,8 @@ public class JwtUtils implements Serializable {
 private static final long serialVersionUID = -2550185165626007488L;
 	
 	public static final long JWT_TOKEN_VALIDITY = 5*60*60;
+	
+	public List<String> validTokens = new ArrayList<String>();
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -50,13 +54,14 @@ private static final long serialVersionUID = -2550185165626007488L;
 	}
 
 	private Boolean ignoreTokenExpiration(String token) {
-		// here you specify tokens, for that the expiration is ignored
 		return false;
 	}
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-		return doGenerateToken(claims, userDetails.getUsername());
+		final String token = doGenerateToken(claims, userDetails.getUsername());
+		validTokens.add(token);
+		return token;
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -68,9 +73,13 @@ private static final long serialVersionUID = -2550185165626007488L;
 	public Boolean canTokenBeRefreshed(String token) {
 		return (!isTokenExpired(token) || ignoreTokenExpiration(token));
 	}
+	
+	public Boolean expireToken(String token) {
+		return validTokens.remove(token);
+	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && validTokens.contains(token)); 
 	}
 }

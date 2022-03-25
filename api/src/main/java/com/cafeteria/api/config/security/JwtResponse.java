@@ -2,7 +2,7 @@ package com.cafeteria.api.config.security;
 
 public class JwtResponse {
 	
-	private final String tokenId;
+	private final String jwt;
 	
 	private Integer employeeId;
 	
@@ -20,9 +20,9 @@ public class JwtResponse {
 	
 	private Integer employeeGender;
 	
-	public JwtResponse(String tokenId, Integer employeeId, String employeeLoginName, String employeeName,
+	public JwtResponse(String jwt, Integer employeeId, String employeeLoginName, String employeeName,
 			String employeeEmail, String employeePhone, Integer employeeRole, String employeeImage, Integer employeeGender) {
-		this.tokenId = tokenId;
+		this.jwt = jwt;
 		this.employeeId = employeeId;
 		this.employeeLoginName = employeeLoginName;
 		this.employeeName = employeeName;
@@ -34,8 +34,8 @@ public class JwtResponse {
 	}
 	
 	
-	public String getTokenId() {
-		return tokenId;
+	public String getJwt() {
+		return jwt;
 	}
 
 	public Integer getEmployeeGender() {
@@ -102,11 +102,8 @@ public class JwtResponse {
 		this.employeeImage = employeeImage;
 	}
 	
-	public JwtResponse(String tokenId) {
-		this.tokenId = tokenId;
+	public JwtResponse(String jwt) {
+		this.jwt = jwt;
 	}
 	
-	public String getJwt() {
-		return this.tokenId;
-	}
 }

@@ -56,4 +56,9 @@ public class JwtAuthenticationController {
 		return ResponseEntity.ok(new JwtResponse(token, employee.getEmployeeId(), employee.getEmployeeLoginName(), employee.getEmployeeName(),
 				employee.getEmployeeEmail(), employee.getEmployeePhone(), employee.getEmployeeRole(), employee.getEmployeeImage(), employee.getEmployeeGender()));
 	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<Boolean> expireAuthToken(@RequestBody JwtResponse jwtResponse) {
+		return ResponseEntity.ok(jwtTokenUtil.expireToken(jwtResponse.getJwt()));
+	}
 }
